@@ -61,3 +61,21 @@
         guess
         (sqrt-iter (improve guess))))
   (sqrt-iter 1.0))
+
+;; linear recursive process for computing factorial
+(define (factorial-rec n)
+  (if (= n 1)
+      1
+      (* n (factorial-rec (- n 1)))))
+
+;; linear iterative process for computing factorial
+(define (factorial-lin n)
+  (define (fac-iter product counter)
+    (if (> counter n)
+        product
+        (fac-iter (* product counter) (+ counter 1))))
+  (fac-iter 1 1))
+; Note that although we use a recursive procedure, this is an iterative process.  And thanks to the
+; tail-recursive implementation, this process is executed in constant space, and iteration can be
+; expressed using the ordinary procedure call mechanism and special iteration constructs like
+; for-loop are useful only as syntactic sugar.
