@@ -33,7 +33,7 @@
   (not (< x y)))  ; not is an ordinary procedure
 
 ;; square root by newton's method
-(define (sqrt x)
+(define (sqrt-newton x)
   (sqrt-iter 1.0 x))
 
 (define (sqrt-iter guess x)
@@ -49,3 +49,15 @@
 
 (define (good-enough? guess x)
   (< (abs (- (square guess) x)) 0.001))
+
+;; block structure and lexical scoping
+(define (sqrt-newton-block x)
+  (define (good-enough? guess)  ; make x a free variable for these procedures -> lexical scoping
+    (< (abs (- (square guess) x)) 0.001))
+  (define (improve guess)
+    (average guess (/ x guess)))
+  (define (sqrt-iter guess)
+    (if (good-enough? guess)
+        guess
+        (sqrt-iter (improve guess))))
+  (sqrt-iter 1.0))
