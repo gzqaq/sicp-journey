@@ -1,0 +1,8 @@
+#+title: SICP journey
+#+author: Ziqin Gong
+
+** Install sicp lang in Racket
+Follow [[https://docs.racket-lang.org/sicp-manual/Installation.html][this official guide]] to install the sicp package using DrRacket.
+
+** Use sicp lang
+Set ~#lang sicp~ as the language specification on the first line.
