@@ -79,3 +79,11 @@
 ; tail-recursive implementation, this process is executed in constant space, and iteration can be
 ; expressed using the ordinary procedure call mechanism and special iteration constructs like
 ; for-loop are useful only as syntactic sugar.
+
+;; Ackermann's function
+(define (A x y)
+  (cond ((= y 0) 0)
+        ((= x 0) (* 2 y))
+        ((= y 1) 2)
+        (else (A (- x 1)
+                 (A x (- y 1))))))
