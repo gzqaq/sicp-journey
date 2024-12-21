@@ -74,3 +74,44 @@
       1
       (+ (exercise-1-12 (- a 1) (- b 1))
          (exercise-1-12 (- a 1) b))))
+
+(define (exer-1-16 b n)
+  (define (expt-iter a b n)
+    (cond ((= n 0) a)
+          ((even? b) (expt-iter a (square b) (/ n 2)))
+          (else (expt-iter (* a b) b (- n 1)))))
+  (expt-iter 1 b n))
+
+(define (double n)
+  (* n 2))
+
+(define (halve n)  ; divides an even number
+  (/ n 2))
+
+(define (exer-1-17 a b)
+  (cond ((= b 0) 0)
+        ((even? b) (double (exer-1-17 a (halve b))))
+        (else (+ a (exer-1-17 a (- b 1))))))
+
+(define (exer-1-18 a b)
+  (define (*-iter product a b)
+    (cond ((= b 0) product)
+          ((even? b) (*-iter product (double a) (halve b)))
+          (else (*-iter (+ product a) a (- b 1)))))
+  (*-iter 0 a b))
+
+(define (exer-1-19 n)
+  (define (fib-iter a b p q counter)
+    (cond ((= counter 0) b)
+          ((even? counter) (fib-iter a b
+                                     (sum-of-squares p q)
+                                     (+ (square q) (* 2 p q))
+                                     (halve counter)))
+          (else (fib-iter (+ (* b q)
+                             (* a q)
+                             (* a p))
+                          (+ (* b p)
+                             (* a q))
+                          p q
+                          (- counter 1)))))
+  (fib-iter 1 0 0 1 n))
