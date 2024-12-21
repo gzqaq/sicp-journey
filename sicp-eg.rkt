@@ -139,3 +139,9 @@
   (cond ((= n 0) 1)
         ((even? n) (square (fast-expt b (/ n 2))))
         (else (* b (fast-expt b (- n 1))))))
+
+;; gcd by euclid's algorithm
+(define (gcd a b)
+  (if (= b 0)
+      a
+      (gcd b (remainder a b))))
