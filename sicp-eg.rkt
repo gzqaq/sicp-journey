@@ -87,3 +87,36 @@
         ((= y 1) 2)
         (else (A (- x 1)
                  (A x (- y 1))))))
+
+;; tree recursion e.g. fibonacci
+(define (fib-rec n)
+  (cond ((= n 0) 0)
+        ((= n 1) 1)
+        (else (+ (fib-rec (- n 1))
+                 (fib-rec (- n 2))))))
+
+(define (fib-iter n)
+  (define (fib--iter a b counter)
+    (if (= counter 0)
+        b
+        (fib--iter (+ a b) a (- counter 1))))
+  (fib--iter 1 0 n))
+
+;; tree-recursive process is natural, whereas an iterative version is a challenge
+;; e.g. counting change
+(define (count-change amount)
+  (define (cc amt kinds-of-coins)
+    (cond ((= amt 0) 1)
+          ((or (< amt 0)
+               (= kinds-of-coins 0))
+           0)
+          (else
+           (+ (cc amt (- kinds-of-coins 1))
+              (cc (- amt (first-denomination kinds-of-coins)) kinds-of-coins)))))
+  (define (first-denomination kinds-of-coins)
+    (cond ((= kinds-of-coins 1) 1)
+          ((= kinds-of-coins 2) 5)
+          ((= kinds-of-coins 3) 10)
+          ((= kinds-of-coins 4) 25)
+          ((= kinds-of-coins 5) 50)))
+  (cc amount 5))
