@@ -120,3 +120,22 @@
           ((= kinds-of-coins 4) 25)
           ((= kinds-of-coins 5) 50)))
   (cc amount 5))
+
+;; linear recursive version of exponential
+(define (expt-rec b n)
+  (if (= n 0)
+      1
+      (* b (expt-rec b (- n 1)))))
+
+(define (expt-iter b n)
+  (define (expt--iter product counter)
+    (if (= counter 0)
+        product
+        (expt--iter (* product b) (- counter 1))))
+  (expt--iter 1 n))
+
+;; logn fast exponential
+(define (fast-expt b n)
+  (cond ((= n 0) 1)
+        ((even? n) (square (fast-expt b (/ n 2))))
+        (else (* b (fast-expt b (- n 1))))))
