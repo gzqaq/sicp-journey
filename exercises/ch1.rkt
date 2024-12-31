@@ -189,3 +189,27 @@
         result
         (sum--iter (next a) (+ (term a) result))))
   (sum--iter a 0))
+
+;; exercise 1.31
+(define (product term a next b)
+  (define (prod--iter a result)
+    (if (> a b)
+        result
+        (prod--iter (next a) (* (term a) result))))
+  (prod--iter a 1))
+
+(define (prod-rec term a next b)
+  (if (> a b)
+      1
+      (* (term a)
+         (prod-rec term (next a) next b))))
+
+(define (factorial n)
+  (product identity 1 inc n))
+
+(define (pi-1-31 n)
+  (define (term k)
+    (define numer (* k 2))
+    (square (/ numer (+ numer 1.0))))
+  (* 2 2 (inc n)
+     (product term 1 inc n)))
