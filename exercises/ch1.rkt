@@ -213,3 +213,17 @@
     (square (/ numer (+ numer 1.0))))
   (* 2 2 (inc n)
      (product term 1 inc n)))
+
+;; exercise 1.32
+(define (accumulate combiner null-value term a next b)
+  (define (acc--iter a result)
+    (if (> a b)
+        result
+        (acc--iter (next a) (combiner result (term a)))))
+  (acc--iter a null-value))
+
+(define (acc-rec combiner null-value term a next b)
+  (if (> a b)
+      null-value
+      (combiner (term a)
+                (acc-rec combiner null-value term (next a) next b))))
