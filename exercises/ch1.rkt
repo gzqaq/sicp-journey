@@ -227,3 +227,20 @@
       null-value
       (combiner (term a)
                 (acc-rec combiner null-value term (next a) next b))))
+
+;; exercise 1.36
+(define (close? x y)  ;; numpy.isclose
+  (let ((rtol 0.00001)
+        (atol 0.00000001))
+    (<= (abs (- x y))
+        (+ atol (* rtol (abs y))))))
+
+(define (fixed-point-print f first-guess)
+  (define (try guess)
+    (let ((next-guess (f guess)))
+      (display next-guess)
+      (newline)
+      (if (close? next-guess guess)
+          next-guess
+          (try next-guess))))
+  (try first-guess))
