@@ -260,3 +260,21 @@
         (iter-inner (- i 1)
                     (/ (n i) (+ (d i) res)))))
   (iter-inner k 0))
+
+;; exercise 1.38
+(define (exer-1-38 k)
+  (+ 2
+     (cont-frac-iter
+      (lambda (i) 1.0)
+      (lambda (i)
+        (if (= 2 (remainder i 3))
+            (* 2 (/ (+ i 1) 3))
+            1))
+      k)))
+
+;; exercise 1.39
+(define (tan-cf x k)
+  (cont-frac-iter
+   (lambda (i) (if (= i 1) x (- (square x))))
+   (lambda (i) (- (* i 2) 1))
+   k))
