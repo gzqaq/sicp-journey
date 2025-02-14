@@ -230,3 +230,48 @@
     (+ (* x (square a))
        (* y b)
        (* a b))))
+
+;; example: half-interval method
+(define (search f neg-point pos-point)
+  (let ((mid-point (average neg-point pos-point)))
+    (if (close? neg-point pos-point)
+        mid-point
+        (let ((test-value (f mid-point)))
+          (cond ((positive? test-value)
+                 (search f neg-point mid-point))
+                ((negative? test-value)
+                 (search f mid-point pos-point))
+                (else mid-point))))))
+
+(define (close? x y)  ;; numpy.isclose
+  (let ((rtol 0.00001)
+        (atol 0.00000001))
+    (<= (abs (- x y))
+        (+ atol (* rtol (abs y))))))
+
+(define (half-interval-method f a b)
+  (let ((f-a (f a))
+        (f-b (f b)))
+    (cond ((and (negative? f-a)
+                (positive? f-b))
+           (search f a b))
+          ((and (positive? f-a)
+                (negative? f-b))
+           (search f b a))
+          (else
+           (error "Values are not of opposite sign" a b)))))
+
+;; example: find fixed-point
+(define (fixed-point f first-guess)
+  (define (try guess)
+    (let ((next-guess (f guess)))
+      (if (close? next-guess guess)
+          next-guess
+          (try next-guess))))
+  (try first-guess))
+
+;; finding a y s.t. y^2 = x is equiv. to finding fixed point of y -> x / y, or y -> (y + x / y) / 2,
+;; since next-guess is again y when guess is x / y
+(define (sqrt-fixed-point x)
+  (fixed-point (lambda (y) (average (/ x y) y))
+               1.0))
