@@ -244,3 +244,19 @@
           next-guess
           (try next-guess))))
   (try first-guess))
+
+;; exercise 1.37
+(define (cont-frac-rec n d k)
+  (define (cont-frac-inner i)
+    (if (= i k)
+        (/ (n i) (d i))
+        (/ (n i) (+ (d i) (cont-frac-inner (+ i 1))))))
+  (cont-frac-inner 1))
+
+(define (cont-frac-iter n d k)
+  (define (iter-inner i res)
+    (if (= i 0)
+        res
+        (iter-inner (- i 1)
+                    (/ (n i) (+ (d i) res)))))
+  (iter-inner k 0))
