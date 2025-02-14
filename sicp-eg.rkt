@@ -275,3 +275,50 @@
 (define (sqrt-fixed-point x)
   (fixed-point (lambda (y) (average (/ x y) y))
                1.0))
+
+;; average damping
+(define (average-damp f)
+  (lambda (x)
+    (average x (f x))))
+
+(define (sqrt-aver-damp x)
+  (fixed-point (average-damp (lambda (y) (/ x y)))
+               1.0))
+
+(define (cube-root-aver-damp x)
+  (fixed-point (average-damp (lambda (y) (/ x (square y))))
+               1.0))
+
+;; newton's method: solution to g(x) = 0 is a fixed point of x - g(x) / dg(x)
+(define (deriv g)
+  (lambda (x)
+    (/ (- (g (+ x dx)) (g x))
+       dx)))
+
+(define dx 0.00001)
+
+(define (newton-transform g)
+  (lambda (x)
+    (- x (/ (g x) ((deriv g) x)))))
+
+(define (newtons-method g guess)
+  (fixed-point (newton-transform g) guess))
+
+(define (sqrt-fixed-newton x)
+  (newtons-method (lambda (y) (- (square y) x)) 1.0))
+
+;; each sqrt begins with a function and finds a fixed point of some transformation of the function
+(define (fixed-point-of-transform g transform guess)
+  (fixed-point (transform g) guess))
+
+(define (sqrt-damp-transform x)
+  (fixed-point-of-transform
+   (lambda (y) (/ x y))
+   average-damp
+   1.0))
+
+(define (sqrt-newton-transform x)
+  (fixed-point-of-transform
+   (lambda (y) (- (square y) x))
+   newton-transform
+   1.0))
