@@ -278,3 +278,15 @@
    (lambda (i) (if (= i 1) x (- (square x))))
    (lambda (i) (- (* i 2) 1))
    k))
+
+;; exercise 1.40 1.41
+(define (exer-1-40 a b c)
+  (lambda (x)
+    (+ (* x x x)
+       (* a x x)
+       (* b x)
+       c)))
+
+(define exer-1-41
+  (let ((double (lambda (g) (lambda (x) (g (g x))))))
+    (((double (double double)) inc) 5)))
