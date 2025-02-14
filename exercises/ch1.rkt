@@ -25,6 +25,9 @@
           (else
            (sum-of-squares a b)))))
 
+(define (average a b)
+  (/ (+ a b) 2))
+
 (define (exercise-1-7 x)
   (define (sqrt-iter last-guess guess x)
     (if (good-enough? last-guess guess)
@@ -34,8 +37,6 @@
     (average guess (/ x guess)))
   (define (good-enough? last-guess guess)
     (< (abs (- last-guess guess)) 0.001))
-  (define (average a b)
-    (/ (+ a b) 2))
   (sqrt-iter 0.0 1.0 x))
 
 (define (exercise-1-8 x)
@@ -315,3 +316,23 @@
 
 (define (n-fold-smooth f n)
   ((repeated smooth n) f))
+
+;; exercise 1.46
+(define (iterative-improve good-enough? improve)
+  (define (try guess)
+    (if (good-enough? guess)
+        guess
+        (try (improve guess))))
+  (lambda (first-guess) (try first-guess)))
+
+(define (sqrt-iter-improve x)
+  ((iterative-improve
+    (lambda (guess) (close? (square guess) x))
+    (lambda (guess) (average guess (/ x guess))))
+   1.0))
+
+(define (fixed-point-iter-improve f first-guess)
+  ((iterative-improve
+    (lambda (guess) (close? (f guess) guess))
+    f)
+   first-guess))
