@@ -290,3 +290,15 @@
 (define exer-1-41
   (let ((double (lambda (g) (lambda (x) (g (g x))))))
     (((double (double double)) inc) 5)))
+
+;; exercise 1.42
+(define (compose f g)
+  (lambda (x) (f (g x))))
+
+;; exercise 1.43
+(define (repeated f n)
+  (define (repeat-iter res i)
+    (if (= i 0)
+        res
+        (repeat-iter (compose f res) (- i 1))))
+  (repeat-iter f (- n 1)))
