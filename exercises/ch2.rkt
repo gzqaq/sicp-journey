@@ -24,3 +24,12 @@
   (display ",")
   (display (y-point p))
   (display ")"))
+
+
+;; exer 2.4
+(define (exer-2-4-cons x y)
+  (lambda (m) (m x y)))
+(define (exer-2-4-car z)
+  (z (lambda (p q) p)))
+(define (exer-2-4-cdr z)
+  (z (lambda (p q) q)))
