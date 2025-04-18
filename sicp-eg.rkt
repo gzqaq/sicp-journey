@@ -372,3 +372,15 @@
 (define (make-rat n d)
   (let ((g (gcd n d)))
     (cons (/ n g) (/ d g))))
+
+;; any triple of procedures that satisfies the condition for `cons', `car' and `cdr' can be used as
+;; the basis for implementing pairs
+(define (my-cons x y)
+  (define (dispatch m)
+    (cond ((= m 0) x)
+          ((= m 1) y)
+          (else (error "Argument not 0 or 1 -- CONS" m))))
+  dispatch)
+
+(define (my-car z) (z 0))
+(define (my-cdr z) (z 1))
