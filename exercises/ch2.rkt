@@ -33,3 +33,20 @@
   (z (lambda (p q) p)))
 (define (exer-2-4-cdr z)
   (z (lambda (p q) q)))
+
+
+;; exer 2.5
+(define (exer-2-5-cons a b)
+  (* (expt 2 a) (expt 3 b)))
+(define (exer-2-5-car z)
+  (define (car-iter n cnt)
+    (if (= (remainder n 2) 0)
+        (car-iter (/ n 2) (+ cnt 1))
+        cnt))
+  (car-iter z 0))
+(define (exer-2-5-cdr z)
+  (define (cdr-iter n cnt)
+    (if (= (remainder n 3) 0)
+        (cdr-iter (/ n 3) (+ cnt 1))
+        cnt))
+  (cdr-iter z 0))
