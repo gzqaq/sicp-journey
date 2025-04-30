@@ -384,3 +384,27 @@
 
 (define (my-car z) (z 0))
 (define (my-cdr z) (z 1))
+
+;; list-ref
+(define (list-ref items n)
+  (if (= n 0)
+      (car items)
+      (list-ref (cdr items) (- n 1))))
+
+;; length of list
+(define (length--rec items)
+  (if (null? items)
+      0
+      (+ 1 (length (cdr items)))))
+(define (length--iter items)
+  (define (length-iter a cnt)
+    (if (null? a)
+        cnt
+        (length-iter (cdr a) (+ cnt 1))))
+  (length-iter items 0))
+
+;; append a list to another
+(define (append list1 list2)
+  (if (null? list1)
+      list2
+      (cons (car list1) (append (cdr list1) list2))))
