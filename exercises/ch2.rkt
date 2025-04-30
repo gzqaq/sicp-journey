@@ -133,3 +133,19 @@
   (make-center-width c (* c p)))
 (define (percent i)
   (/ (width i) i))
+
+
+;; exer 2.17
+(define (last-pair items)
+  (if (null? (cdr items))
+      items
+      (last-pair (cdr items))))
+
+
+;; exer 2.18
+(define (reverse items)
+  (define (rev-iter items res)
+    (if (null? items)
+        res
+        (rev-iter (cdr items) (cons (car items) res))))
+  (rev-iter items nil))
