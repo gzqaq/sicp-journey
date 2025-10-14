@@ -149,3 +149,36 @@
         res
         (rev-iter (cdr items) (cons (car items) res))))
   (rev-iter items nil))
+
+
+;; exer 2.19
+(define (count-change amount coins)
+  (define (cc amt coin-values)
+    (cond ((= amt 0) 1)
+          ((or (< amt 0)
+               (no-more? coin-values))
+           0)
+          (else
+           (+ (cc amt (except-first-denomination coin-values))
+              (cc (- amt (first-denomination coin-values)) coin-values)))))
+  (define (first-denomination coin-values)
+    (car coin-values))
+  (define (except-first-denomination coin-values)
+    (cdr coin-values))
+  (define (no-more? coin-values)
+    (null? coin-values))
+  (cc amount coins))
+
+(define us-coins (list 50 25 10 5 1))
+(define uk-coins (list 100 50 20 10 5 2 1 0.5))
+
+
+;; exer 2.20
+(define (same-parity n . integers)
+  (let ((parity (remainder n 2)))
+    (define (has-parity-inner seq result)
+      (cond ((null? seq) result)
+            ((= parity (remainder (car seq) 2))
+             (has-parity-inner (cdr seq) (cons (car seq) result)))
+            (else (has-parity-inner (cdr seq) result))))
+    (reverse (has-parity-inner integers nil))))
