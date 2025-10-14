@@ -408,3 +408,10 @@
   (if (null? list1)
       list2
       (cons (car list1) (append (cdr list1) list2))))
+
+;; the number of leaves of a tree represented by a nested list
+(define (count-leaves x)
+  (cond ((null? x) 0)
+        ((not (pair? x)) 1)
+        (else (+ (count-leaves (car x))
+                 (count-leaves (cdr x))))))

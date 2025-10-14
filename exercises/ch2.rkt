@@ -1,5 +1,8 @@
 #lang sicp
 
+;; utilities
+(define (square n) (* n n))
+
 ;; exer 2.1
 (define (make-rat n d)
   (let ((g (gcd n d))
@@ -182,3 +185,84 @@
              (has-parity-inner (cdr seq) (cons (car seq) result)))
             (else (has-parity-inner (cdr seq) result))))
     (reverse (has-parity-inner integers nil))))
+
+
+;; exer 2.21
+(define (square-list items)
+  (if (null? items)
+      nil
+      (cons (square (car items)) (square-list (cdr items)))))
+
+(define (square-list-map items)
+  (map square items))
+
+
+;; exer 2.23
+(define (zq/for-each func items)
+  (define (step items)
+    (func (car items))
+    (cdr items))
+  (if (null? items)
+      nil
+      (zq/for-each func (step items))))
+
+(define (zq/for-each-map func items)
+  (map func items)
+  nil)
+
+
+;; exer 2.27
+(define (deep-reverse x)
+  (define (rev-iter result t)
+    (cond ((null? t) result)
+          ((not (pair? t)) t)
+          (else (rev-iter (cons (rev-iter nil (car t)) result) (cdr t)))))
+  (rev-iter nil x))
+
+
+;; exer 2.28
+(define (fringe x)
+  (define (fringe-iter result t)
+    (cond ((null? t) result)
+          ((not (pair? t)) (cons t result))
+          (else (fringe-iter (fringe-iter result (car t)) (cdr t)))))
+  (reverse (fringe-iter nil x)))
+
+
+;; exer 2.29
+(define (make-mobile left right) (list left right))
+(define (make-branch len structure) (list len structure))
+
+(define (left-branch x) (car x))
+(define (right-branch x) (cadr x))
+(define (branch-length b) (car b))
+(define (branch-structure b) (cadr b))
+
+(define e2.29-input (make-mobile (make-branch 6 (make-mobile (make-branch 3 4.0)
+                                                             (make-branch 9 (make-mobile
+                                                                             (make-branch 1 3.0)
+                                                                             (make-branch 9 0.1)))))
+                                 (make-branch 77 -4.0)))
+(define (branch? x) (not (pair? (car x))))
+
+(define (total-weight x)
+  (if (not (pair? x))
+      x
+      (+ (total-weight (branch-structure (left-branch x)))
+         (total-weight (branch-structure (right-branch x))))))
+
+(define e2.29-balanced-mobile
+  (make-mobile (make-branch 6 (make-mobile (make-branch 2 (make-mobile (make-branch 1 2)
+                                                                       (make-branch 2 1)))
+                                           (make-branch 3 2)))
+               (make-branch 2 (make-mobile (make-branch 2 5) (make-branch 1 10)))))
+
+(define (balanced? x)
+    (if (not (pair? x))
+        true
+        (let ((lb (left-branch x))
+              (rb (right-branch x)))
+          (and (= (* (branch-length lb) (total-weight (branch-structure lb)))
+                  (* (branch-length rb) (total-weight (branch-structure rb))))
+               (balanced? (branch-structure lb))
+               (balanced? (branch-structure rb))))))
