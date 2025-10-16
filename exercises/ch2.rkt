@@ -266,3 +266,36 @@
                   (* (branch-length rb) (total-weight (branch-structure rb))))
                (balanced? (branch-structure lb))
                (balanced? (branch-structure rb))))))
+
+
+;; exer 2.30
+(define (square-tree tree)
+  (cond ((null? tree) nil)
+        ((not (pair? tree)) (square tree))
+        (else (cons (square-tree (car tree))
+                    (square-tree (cdr tree))))))
+
+(define (square-tree-map tree)
+  (map (lambda (sub-tree)
+         (if (pair? sub-tree)
+             (square-tree-map sub-tree)
+             (square sub-tree)))
+       tree))
+
+
+;; exer 2.31
+(define (tree-map func tree)
+  (map (lambda (sub-tree)
+         (if (pair? sub-tree)
+             (tree-map func sub-tree)
+             (func sub-tree)))
+       tree))
+
+
+;; exer 2.33
+(define (subsets s)
+  (if (null? s)
+      (list nil)
+      (let ((rest (subsets (cdr s))))
+        ;; All subsets containing the first element and those without
+        (append rest (map (lambda (elem) (cons (car s) elem)) rest)))))
