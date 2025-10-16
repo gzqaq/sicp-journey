@@ -2,6 +2,14 @@
 
 ;; utilities
 (define (square n) (* n n))
+(define (accumulate op initial sequence)
+  (if (null? sequence)
+      initial
+      (op (car sequence) (accumulate op initial (cdr sequence)))))
+(define (enumerate-tree tree)
+  (cond ((null? tree) nil)
+        ((not (pair? tree)) (list tree))
+        (else (append (enumerate-tree (car tree)) (enumerate-tree (cdr tree))))))
 
 ;; exer 2.1
 (define (make-rat n d)
@@ -292,10 +300,71 @@
        tree))
 
 
-;; exer 2.33
+;; exer 2.32
 (define (subsets s)
   (if (null? s)
       (list nil)
       (let ((rest (subsets (cdr s))))
         ;; All subsets containing the first element and those without
         (append rest (map (lambda (elem) (cons (car s) elem)) rest)))))
+
+
+;; exer 2.33
+(define (map-by-acc p sequence)
+  (accumulate (lambda (x y) (cons (p x) y)) nil sequence))
+(define (append-by-acc seq1 seq2)
+  (accumulate cons seq2 seq1))
+(define (length-by-acc sequence)
+  (accumulate (lambda (x y) (+ y 1)) 0 sequence))
+
+
+;; exer 2.34
+(define (horner-eval x coefficient-sequence)
+  (accumulate (lambda (this-coeff higher-terms) (+ this-coeff (* higher-terms x)))
+              0
+              coefficient-sequence))
+
+
+;; exer 2.35
+(define (count-leaves t)
+  (accumulate + 0 (map (lambda (x) 1) (enumerate-tree t))))
+
+
+;; exer 2.36
+(define (accumulate-n op initial seqs)
+  (if (null? (car seqs))
+      nil
+      (cons (accumulate op initial (map car seqs))
+            (accumulate-n op initial (map cdr seqs)))))
+
+
+;; exer 2.37
+(define (dot-product v w)
+  (accumulate + 0 (map * v w)))  ;; uses the extended version of `map'
+
+(define (matrix-*-vector m v)
+  (map (lambda (u) (dot-product u v )) m))
+
+(define (transpose mat)
+  (accumulate-n cons nil mat))
+
+(define (matrix-*-matrix m n)
+  (let ((cols (transpose n)))
+    (map (lambda (u) (matrix-*-vector cols u)) m)))
+
+
+;; exer 2.38
+(define (fold-left op initial sequence)
+  (define (iter result seq)
+    (if (null? seq)
+        result
+        (iter (op result (car seq)) (cdr seq))))
+  (iter initial sequence))
+
+
+;; exer 2.39
+(define (reverse-by-fold-right sequence)
+  (accumulate (lambda (x y) (append y (list x))) nil sequence))
+
+(define (reverse-by-fold-left sequence)
+  (fold-left (lambda (x y) (cons y x)) nil sequence))
